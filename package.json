@@ -1,0 +1,32 @@
+{
+  "name": "@ostro/server",
+  "version": "0.0.0-alpha.0",
+  "description": "Ostrojs http server module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@ostro/contracts": "^0.0.0-alpha.0",
+    "@ostro/support": "^0.0.0-alpha.0",
+    "finalhandler": "^1.1.2"
+  },
+  "keywords": [
+    "nodejs server",
+    "http server"
+  ],
+  "author": "amar",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ostrojs/server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ostrojs/server/issues"
+  },
+  "homepage": "https://github.com/ostrojs/server#readme",
+  "engines": {
+    "node": ">= 12.0"
+  }
+}
