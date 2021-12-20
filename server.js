@@ -60,8 +60,8 @@ class Server extends ServerContract {
     constructor(config = {}) {
         super()
         config = resolveConfig(config);
-        this.$port = config.port;
-        this.$host = config.host;
+        this.$port = config.port || 8080;
+        this.$host = config.host || '127.0.0.1';
         this[kHttpVersion] = config.http_version;
         this[kSsl] = config.ssl;
         this[kStacks] = [];
@@ -264,11 +264,8 @@ function resolveConfig(config = {}) {
             config.ssl.ca = path.isAbsolute(config.ssl.ca) ? fs.readFileSync(config.ssl.ca) : fs.readFileSync(path.resolve(config.ssl.ca));
         }
     }
-    if(!config.port){
-        config.port = 8000
-    }
-    if(!config.host){
-        config.host = '127.0.0.1'
+    if(config.port){
+        config.port = parseInt(config.port)
     }
     return config
 }
