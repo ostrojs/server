@@ -1,6 +1,6 @@
 {
   "name": "@ostro/server",
-  "version": "0.0.0-alpha.2",
+  "version": "0.0.0-alpha.3",
   "description": "Server module for OstroJS",
   "main": "server.js",
   "scripts": {
