@@ -55,6 +55,7 @@ class Server extends ServerContract {
         this.$host = config.host || '127.0.0.1';
         this[kHttpVersion] = config.http_version;
         this[kSsl] = config.ssl;
+        this[kServerType] = 'server';
         this[kStacks] = [];
     }
 
@@ -76,7 +77,7 @@ class Server extends ServerContract {
         if (typeof handle.handle === 'function') {
             var server = handle;
             server.route = path;
-            handle = function(req, res, next) {
+            handle = function (req, res, next) {
                 server.handle(req, res, next);
             };
         }
@@ -91,7 +92,7 @@ class Server extends ServerContract {
     createServerConfig() {
         return Object.assign(creatSslConfig(this[kSsl], this[kHttpVersion]))
     }
-    
+
     address(options = {}) {
         if (path.isAbsolute(String(options.port || ' '))) {
             return options.port
@@ -106,60 +107,60 @@ class Server extends ServerContract {
         }
     }
 
-    request(HttpRequest ){
-        if(typeof HttpRequest != 'function'){
+    request(HttpRequest) {
+        if (typeof HttpRequest != 'function') {
             throw new Error('HttpRequest class must be function/class')
         }
-        Object.defineProperty(this,'$request',{value:HttpRequest})
+        Object.defineProperty(this, '$request', { value: HttpRequest })
     }
 
-    response(HttpResponse){
-        if(typeof HttpResponse != 'function'){
+    response(HttpResponse) {
+        if (typeof HttpResponse != 'function') {
             throw new Error('HttpResponse class must function/class')
         }
-        Object.defineProperty(this,'$response',{value:HttpResponse})
+        Object.defineProperty(this, '$response', { value: HttpResponse })
     }
 
     handler() {
         if (this[kServerType] == 'serverless') {
             return (new Serverless(this[kStacks])).handle(this.$request, this.$response);
-        }else if (this[kServerType] == 'server') {
-             return (new HttpServer(this[kStacks])).handle(this.$request, this.$response);
+        } else if (this[kServerType] == 'server') {
+            return (new HttpServer(this[kStacks])).handle(this.$request, this.$response);
         }
         throw new Error('Server type not supported');
     }
 
-    type(type){
+    type(type) {
         this[kServerType] = type;
     }
 
-    start(options={},cb) {
+    start(options = {}, cb) {
         var options = this.address(options)
         let httpConfig = httpTypes[this[kHttpVersion]]
         let http = require(httpConfig.module)
         let args = Array.from(arguments)
         options = args.find(arg => typeof arg == 'object') || {}
         cb = args.find(arg => typeof arg == 'function')
-       
+
         options = typeof options === 'string' ? { port: options } : options;
-        if(options.port){
+        if (options.port) {
             this.$port = options.port
         }
-        if(options.host){
+        if (options.host) {
             this.$host = options.host
         }
         return http[httpConfig.starter](this.createServerConfig(), this.handler())
-            .listen({port:this.$port,host:this.$host}, () => {
-            if (typeof cb == 'function') {
-                cb({
-                    port: this.$port,
-                    host: this.$host,
-                    server: ''
-                })
-            } else {
-                console.log(`Application Running on ${path.isAbsolute(this.$port.toString())?'pipe : '+this.$port:': '+this.$host + ':' + this.$port}`)
-            }
-        });
+            .listen({ port: this.$port, host: this.$host }, () => {
+                if (typeof cb == 'function') {
+                    cb({
+                        port: this.$port,
+                        host: this.$host,
+                        server: ''
+                    })
+                } else {
+                    console.log(`Application Running on ${path.isAbsolute(this.$port.toString()) ? 'pipe : ' + this.$port : ': ' + this.$host + ':' + this.$port}`)
+                }
+            });
     }
 }
 
@@ -181,7 +182,7 @@ function resolveConfig(config = {}) {
             config.ssl.ca = path.isAbsolute(config.ssl.ca) ? fs.readFileSync(config.ssl.ca) : fs.readFileSync(path.resolve(config.ssl.ca));
         }
     }
-    if(config.port){
+    if (config.port) {
         config.port = parseInt(config.port)
     }
     return config
