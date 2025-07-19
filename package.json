@@ -1,6 +1,6 @@
 {
   "name": "@ostro/server",
-  "version": "1.0.0",
+  "version": "1.1.2",
   "description": "Server module for OstroJS",
   "main": "server.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@ostro/support": "^1.0.2",
-    "@ostro/contracts": "^1.0.0",
+    "@ostro/contracts": "^1.1.4",
     "finalhandler": "^1.1.2"
   },
   "engines": {
