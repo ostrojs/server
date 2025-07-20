@@ -7,7 +7,8 @@ const kServerType = Symbol('serverType')
 const kHttpVersion = Symbol('httpversion')
 const kStacks = Symbol('stack')
 const Serverless = require('./adapter/serverless')
-const HttpServer = require('./adapter/server')
+const HttpServer = require('./adapter/server');
+const { compose } = require('@ostro/support/compose');
 var httpTypes = {
     http2: {
         module: 'http2',
@@ -112,6 +113,7 @@ class Server extends ServerContract {
             throw new Error('HttpRequest class must be function/class')
         }
         Object.defineProperty(this, '$request', { value: HttpRequest })
+        return this;
     }
 
     response(HttpResponse) {
@@ -119,11 +121,12 @@ class Server extends ServerContract {
             throw new Error('HttpResponse class must function/class')
         }
         Object.defineProperty(this, '$response', { value: HttpResponse })
+        return this;
     }
 
-    handler() {
+    handle() {
         if (this[kServerType] == 'serverless') {
-            return (new Serverless(this[kStacks])).handle(this.$request, this.$response);
+            return (new Serverless(this.$handle)).handle(this.$request, this.$response);
         } else if (this[kServerType] == 'server') {
             return (new HttpServer(this[kStacks])).handle(this.$request, this.$response);
         }
@@ -132,6 +135,13 @@ class Server extends ServerContract {
 
     type(type) {
         this[kServerType] = type;
+        return this;
+    }
+    handler(handler) {
+        Object.defineProperty(this, '$handle', {
+            value: handler,
+        });
+        return this;
     }
 
     start(options = {}, cb) {
@@ -149,7 +159,7 @@ class Server extends ServerContract {
         if (options.host) {
             this.$host = options.host
         }
-        return http[httpConfig.starter](this.createServerConfig(), this.handler())
+        return http[httpConfig.starter](this.createServerConfig(), this.handle())
             .listen({ port: this.$port, host: this.$host }, () => {
                 if (typeof cb == 'function') {
                     cb({
@@ -162,6 +172,7 @@ class Server extends ServerContract {
                 }
             });
     }
+
 }
 
 function resolveConfig(config = {}) {
