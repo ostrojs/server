@@ -29,7 +29,7 @@ class LambdaWorker {
                 if (code !== 0) {
                     return reject(new Error(stderr || `Exit code ${code}`));
                 }
-
+                console.log(stdout.replace(/<<<__LAMBDA_RESULT__>>>\n([\s\S]*?)\n<<<__END__>>>\n?/, ''));
                 const resultMatch = stdout.match(/<<<__LAMBDA_RESULT__>>>\n([\s\S]*?)\n<<<__END__>>>\n?/);
                 if (!resultMatch) {
                     return reject(new Error('No valid Lambda result found in output:\n' + stdout));
