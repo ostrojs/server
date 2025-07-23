@@ -22,6 +22,8 @@ class EventBuilder {
                     version: '2.0',
                     routeKey: parsedUrl.pathname,
                     rawPath: parsedUrl.pathname,
+                    url: req.url,
+                    query: parsedUrl.query,
                     rawQueryString: parsedUrl.query
                         ? new URLSearchParams(parsedUrl.query).toString()
                         : '',
