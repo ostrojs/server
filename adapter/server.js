@@ -37,7 +37,7 @@ class Server {
         return (req, res, out) => {
             req = new Request(req)
             res = new Response(res)
-            Object.defineProperty(res, 'req', { value: req })
+            Object.defineProperty(res, 'request', { value: req })
 
             var index = 0;
             var protohost = getProtohost(req.url) || '';
