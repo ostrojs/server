@@ -1,5 +1,8 @@
 class ResponseSender {
     static sendSuccess(res, result) {
+        if (result.cookies) {
+            result.headers['Set-Cookie'] = result.cookies || [];
+        }
         res.writeHead(result.statusCode || 200, result.headers || {});
         if (result.isBase64Encoded) {
             const buffer = Buffer.from(result.body || '', 'base64');
@@ -8,7 +11,6 @@ class ResponseSender {
             res.end(result.body || '');
         }
     }
-
 
     static sendError(res, err) {
         if (typeof err.message === 'string') {
