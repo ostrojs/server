@@ -5,10 +5,12 @@ const fs = require('fs')
 const kSsl = Symbol('ssl')
 const kServerType = Symbol('serverType')
 const kHttpVersion = Symbol('httpversion')
+const kServerlessStategy = Symbol('serverlessStategy')
 const kStacks = Symbol('stack')
 const Serverless = require('./adapter/serverless')
 const HttpServer = require('./adapter/server');
 const { compose } = require('@ostro/support/compose');
+
 var httpTypes = {
     http2: {
         module: 'http2',
@@ -58,6 +60,9 @@ class Server extends ServerContract {
         this[kSsl] = config.ssl;
         this[kServerType] = 'server';
         this[kStacks] = [];
+        Object.defineProperty(this, '$serverless', {
+            value: config?.serverless,
+        });
     }
 
     register(path, handle) {
@@ -126,7 +131,7 @@ class Server extends ServerContract {
 
     handle() {
         if (this[kServerType] == 'serverless') {
-            return (new Serverless(this.$handle)).handle(this.$request, this.$response);
+            return (new Serverless(this.$handle, this.$serverless)).handle(this.$request, this.$response);
         } else if (this[kServerType] == 'server') {
             return (new HttpServer(this[kStacks])).handle(this.$request, this.$response);
         }
