@@ -4,25 +4,42 @@ const ResponseSender = require('./responseSender');
 const path = require('path');
 
 class LambdaSimulator {
-    constructor(handlerString) {
+    constructor(handlerString, serverlessConfig) {
         if (!path.isAbsolute(handlerString)) {
             handlerString = path.resolve(process.cwd(), handlerString);
         }
         const lastDot = handlerString.lastIndexOf('.');
         if (lastDot === -1) throw new Error('Handler must be in format <path>.<function>');
 
-        this.modulePath = handlerString.substring(0, lastDot);
-        this.handlerName = handlerString.substring(lastDot + 1);
+        const modulePath = handlerString.substring(0, lastDot);
 
-        if (!path.isAbsolute(this.modulePath)) {
+        if (!path.isAbsolute(modulePath)) {
             throw new Error('Module path must be absolute');
         }
+        Object.defineProperties(this, {
+            $strategy: {
+                value: 'process',
+                writable: true
+            },
+            $modulePath: {
+                value: modulePath,
+                writable: false
+            },
+            $handlerName: {
+                value: handlerString.substring(lastDot + 1),
+                writable: false
+            },
+            $serverless: {
+                value: serverlessConfig || {},
+            }
+        });
     }
 
     async handleHttpRequest(req, res) {
         const event = await EventBuilder.fromHttpRequest(req);
         try {
-            const result = await LambdaWorker.run(this.modulePath, this.handlerName, event);
+            const worker = LambdaWorker.create(this.$serverless.strategy); // or 'vm', 'process', 'fork'
+            const result = await worker.run(this.$modulePath, this.$handlerName, event);
             ResponseSender.sendSuccess(res, result);
         } catch (err) {
             ResponseSender.sendError(res, err);
@@ -30,7 +47,7 @@ class LambdaSimulator {
     }
 
     async handleEvent(event) {
-        return await LambdaWorker.run(this.modulePath, this.handlerName, event);
+        return await LambdaWorker.run(this.$modulePath, this.$handlerName, event);
     }
 }
 

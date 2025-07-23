@@ -1,15 +1,19 @@
 const LambdaSimulator = require('../serverless/lambdaSimulator');
 class ServerLess {
-    constructor(handler) {
-        this.handler = handler
+    constructor(handler, serverlessConfig) {
+        Object.defineProperties(this, {
+            $lambda: {
+                value: new LambdaSimulator(handler, serverlessConfig)
+            }
+        })
+
     }
 
     handle($request, $response) {
-        const lambda = new LambdaSimulator(this.handler);
-        return async (req, res) => {
+        return (req, res) => {
             req = new $request(req);
             res = new $response(res);
-            lambda.handleHttpRequest(req, res)
+            return this.$lambda.handleHttpRequest(req, res)
         }
     }
 }

@@ -21,7 +21,7 @@ class EventBuilder {
                 resolve({
                     version: '2.0',
                     routeKey: parsedUrl.pathname,
-                    rawPath: parsedUrl.pathname,
+                    rawPath: req.url,
                     url: req.url,
                     query: parsedUrl.query,
                     rawQueryString: parsedUrl.query
@@ -29,6 +29,9 @@ class EventBuilder {
                         : '',
                     cookies,
                     headers,
+                    method: req.method,
+                    params: req.params || {},
+                    query: parsedUrl.query || {},
                     requestContext: {
                         http: {
                             method: req.method,
