@@ -51,17 +51,20 @@ function creatSslConfig(ssl, httpVersion) {
 }
 class Server extends ServerContract {
 
-    constructor(config = {}) {
+    constructor({app,serverless}) {
         super()
-        config = resolveConfig(config);
-        this.$port = config.port || 8080;
-        this.$host = config.host || '127.0.0.1';
-        this[kHttpVersion] = config.http_version;
-        this[kSsl] = config.ssl;
+        config = resolveConfig(app);
+        this.$port = app.port || 8080;
+        this.$host = app.host || '127.0.0.1';
+        this[kHttpVersion] = app.http_version;
+        this[kSsl] = app.ssl;
         this[kServerType] = 'server';
         this[kStacks] = [];
         Object.defineProperty(this, '$serverless', {
-            value: config?.serverless,
+            value: serverless,
+        });
+        Object.defineProperty(this, '$handle', {
+            value: "serverless.handler",
         });
     }
 
@@ -143,9 +146,6 @@ class Server extends ServerContract {
         return this;
     }
     handler(handler) {
-        Object.defineProperty(this, '$handle', {
-            value: handler,
-        });
         return this;
     }
 
