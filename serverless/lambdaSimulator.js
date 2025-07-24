@@ -4,7 +4,8 @@ const ResponseSender = require('./responseSender');
 const path = require('path');
 
 class LambdaSimulator {
-    constructor(handlerString, serverlessConfig) {
+    constructor(serverlessConfig) {
+        let handlerString = serverlessConfig.handler
         if (!path.isAbsolute(handlerString)) {
             handlerString = path.resolve(process.cwd(), handlerString);
         }
