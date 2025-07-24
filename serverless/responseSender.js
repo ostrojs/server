@@ -6,6 +6,7 @@ class ResponseSender {
         res.writeHead(result.statusCode || 200, result.headers || {});
         if (result.isBase64Encoded) {
             const buffer = Buffer.from(result.body || '', 'base64');
+            console.log(buffer.toString('utf8'));
             res.end(buffer);
         } else {
             res.end(result.body || '');
