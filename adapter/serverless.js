@@ -1,9 +1,9 @@
 const LambdaSimulator = require('../serverless/lambdaSimulator');
 class ServerLess {
-    constructor(handler, serverlessConfig) {
+    constructor(serverlessConfig) {
         Object.defineProperties(this, {
             $lambda: {
-                value: new LambdaSimulator(handler, serverlessConfig)
+                value: new LambdaSimulator(serverlessConfig)
             }
         })
 
