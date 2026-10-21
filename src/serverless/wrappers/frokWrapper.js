@@ -14,8 +14,12 @@ process.on('message', async (msg) => {
         }
 
         const result = await Promise.resolve(handler(event));
-        process.send({ result });
+        process.send({ result }, () => {
+            process.exit(0);
+        });
     } catch (error) {
-        process.send({ error: error.stack || error.toString() });
+        process.send({ error: error.stack || error.toString() }, () => {
+            process.exit(1);
+        });
     }
 });
