@@ -1,4 +1,3 @@
-import '@ostro/support/helpers';
 import ServerContract from '@ostro/contracts/server/server';
 import { isAbsolute as pathIsAbsolute, resolve as pathResolve } from 'path';
 import { readFileSync } from 'fs';
