@@ -1,19 +1,19 @@
 {
     "name": "@ostro/server",
-    "version": "2.0.0-alpha.1",
+    "version": "2.0.0-alpha.2",
     "description": "Server module for OstroJS",
     "main": "build/server.js",
-    "types": "build/server.d.ts",
+    "types": "./build/types/server.d.ts",
     "files": [
         "build"
     ],
     "exports": {
         ".": {
-            "types": "./build/server.d.ts",
+            "types": "./build/types/server.d.ts",
             "default": "./build/server.js"
         },
         "./*": {
-            "types": "./build/*.d.ts",
+            "types": "./build/types/*.d.ts",
             "default": "./build/*.js"
         }
     },
@@ -25,8 +25,8 @@
         "clean": "rm -rf build coverage"
     },
     "dependencies": {
-        "@ostro/contracts": "^2.0.0-alpha.1",
-        "@ostro/support": "^2.0.0-alpha.1",
+        "@ostro/contracts": "^2.0.0-alpha.2",
+        "@ostro/support": "^2.0.0-alpha.2",
         "finalhandler": "^1.1.2"
     },
     "engines": {
