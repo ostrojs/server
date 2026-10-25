@@ -1,6 +1,7 @@
+import { describe, test, expect, jest } from "@jest/globals";
 const _LambdaSimulator = require("../src/serverless/lambdaSimulator");
 const LambdaSimulator = _LambdaSimulator.default || _LambdaSimulator;
-const path = require("path");
+const path = require("node:path");
 
 describe("LambdaSimulator (serverless/lambdaSimulator.js)", () => {
     const fixturePath = path.resolve(__dirname, "fixtures/dummyHandler.js") + ".hello";

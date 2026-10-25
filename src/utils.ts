@@ -1,6 +1,6 @@
 export function logerror(err: unknown): void {
     if ((process.env.NODE_ENV || 'development') !== 'test') {
-        console.error((err as any).stack || (err as any).toString());
+        console.error((err as Error).stack || (err as Error).toString());
     }
 }
 
@@ -58,7 +58,7 @@ export const defer: (fn: (...args: any[]) => any, ...args: any[]) => void = type
        * @param fn - Function to defer
        */
       function (fn: (...args: any[]) => any, ...args: any[]): void {
-          process.nextTick(fn.bind.apply(fn, arguments as any));
+          process.nextTick(fn, ...args);
       };
 
 const utils = {

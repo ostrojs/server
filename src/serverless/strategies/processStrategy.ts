@@ -1,5 +1,5 @@
-import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
-import { resolve as pathResolve } from 'path';
+import { spawn, ChildProcessWithoutNullStreams } from 'node:child_process';
+import { resolve as pathResolve } from 'node:path';
 
 class ProcessStrategy {
     /**

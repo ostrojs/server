@@ -1,4 +1,4 @@
-import { dirname as pathDirname } from 'path';
+import { dirname as pathDirname } from 'node:path';
 import { VmStrategy } from './strategies/vmStrategy';
 import { ThreadStrategy } from './strategies/threadStrategy';
 import { ProcessStrategy } from './strategies/processStrategy';

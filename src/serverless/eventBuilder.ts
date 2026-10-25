@@ -1,5 +1,5 @@
-import { parse as parseUrl, UrlWithParsedQuery } from 'url';
-import { Buffer } from 'buffer';
+import { parse as parseUrl, UrlWithParsedQuery } from 'node:url';
+import { Buffer } from 'node:buffer';
 
 interface LambdaEvent {
     version: string;
@@ -50,7 +50,7 @@ class EventBuilder {
                     : [];
 
                 const query: any = parsedUrl.query;
-                const rawQueryString: string = new URLSearchParams(query as any).toString();
+                const rawQueryString: string = new URLSearchParams(query as Record<string, string>).toString();
 
                 resolve({
                     version: '2.0',

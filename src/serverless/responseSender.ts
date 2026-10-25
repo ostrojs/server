@@ -1,4 +1,4 @@
-interface LambdaResult {
+export interface LambdaResult {
     statusCode?: number;
     headers?: Record<string, any>;
     cookies?: string[];
@@ -35,8 +35,8 @@ class ResponseSender {
      * @param err - Error or error message
      */
     static sendError(res: any, err: unknown): void {
-        const message: string = err && typeof (err as any).message === 'string'
-            ? (err as any).message
+        const message: string = err && typeof (err as Error).message === 'string'
+            ? (err as Error).message
             : String(err);
         if (typeof res.send === 'function') {
             return res.send(message, 500);

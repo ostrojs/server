@@ -1,8 +1,9 @@
+import { describe, test, expect, jest } from "@jest/globals";
 const _Server = require("../src/server");
 const Server = _Server.default || _Server;
-const fs = require("fs");
-const path = require("path");
-const http = require("http");
+const fs = require("node:fs");
+const path = require("node:path");
+const http = require("node:http");
 
 class MockRequest {
     constructor(req) {

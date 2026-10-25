@@ -1,5 +1,5 @@
-import { fork, ChildProcess } from 'child_process';
-import { resolve as pathResolve } from 'path';
+import { fork, ChildProcess } from 'node:child_process';
+import { resolve as pathResolve } from 'node:path';
 
 class ForkStrategy {
     /**

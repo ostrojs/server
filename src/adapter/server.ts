@@ -1,5 +1,5 @@
 import utils from '../utils';
-import { parse as parseUrl } from 'url';
+import { parse as parseUrl } from 'node:url';
 // @ts-ignore
 import finalhandler from 'finalhandler';
 
@@ -32,10 +32,10 @@ class Server {
             handle: (error: any, req: any, res: any, next: (err?: unknown) => void): void => {
                 let status: number = 500;
                 if (error instanceof Error) {
-                    status = (error as any).status || 500;
+                    status = (error as Error & { status?: number }).status || 500;
                     error = error.stack;
                 } else if (typeof error == 'object') {
-                    status = (error as any).status || 500;
+                    status = (error as Error & { status?: number }).status || 500;
                     error = JSON.stringify(error);
                 }
                 error = process.env['NODE_ENV'] != 'production' ? error : 'Whoops, looks like something went wrong.';
