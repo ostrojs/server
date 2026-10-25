@@ -1,7 +1,8 @@
-const childProcess = require("child_process");
-const EventEmitter = require("events");
-const path = require("path");
-const fs = require("fs");
+import { describe, test, expect, jest } from "@jest/globals";
+const childProcess = require("node:child_process");
+const EventEmitter = require("node:events");
+const path = require("node:path");
+const fs = require("node:fs");
 
 describe("ForkStrategy (serverless/strategies/forkStrategy.js)", () => {
     const fixturePath = path.resolve(__dirname, "fixtures/dummyHandler.js");

@@ -1,7 +1,7 @@
-import { readFileSync } from 'fs';
-import { dirname as pathDirname } from 'path';
-import { createContext, Script, Context } from 'vm';
-import { createRequire } from 'module';
+import { readFileSync } from 'node:fs';
+import { dirname as pathDirname } from 'node:path';
+import { createContext, Script, Context } from 'node:vm';
+import { createRequire } from 'node:module';
 
 class VmStrategy {
     /**

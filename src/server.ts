@@ -1,16 +1,11 @@
 import ServerContract from '@ostro/contracts/server/server';
-import { isAbsolute as pathIsAbsolute, resolve as pathResolve } from 'path';
-import { readFileSync } from 'fs';
-import http from 'http';
-import https from 'https';
-import http2 from 'http2';
+import { isAbsolute as pathIsAbsolute, resolve as pathResolve } from 'node:path';
+import { readFileSync } from 'node:fs';
+import http from 'node:http';
+import https from 'node:https';
+import http2 from 'node:http2';
 import Serverless from './adapter/serverless';
 import HttpServer from './adapter/server';
-
-const kSsl: unique symbol = Symbol('ssl');
-const kServerType: unique symbol = Symbol('serverType');
-const kHttpVersion: unique symbol = Symbol('httpversion');
-const kStacks: unique symbol = Symbol('stack');
 
 interface HttpStarterConfig {
     module: any;
@@ -67,10 +62,10 @@ class Server extends ServerContract {
     public $serverlessConfig?: any;
     public $request?: any;
     public $response?: any;
-    [kHttpVersion]: string;
-    [kSsl]: any;
-    [kServerType]: string;
-    [kStacks]: any[];
+    #httpVersion: string;
+    #ssl: any;
+    #serverType: string;
+    #stacks: any[];
 
     /**
      * constructor method.
@@ -82,10 +77,10 @@ class Server extends ServerContract {
         const config: any = resolveConfig(app);
         this.$port = config.port !== undefined ? config.port : 8080;
         this.$host = config.host || '127.0.0.1';
-        this[kHttpVersion] = config.http_version;
-        this[kSsl] = config.ssl;
-        this[kServerType] = 'server';
-        this[kStacks] = [];
+        this.#httpVersion = config.http_version;
+        this.#ssl = config.ssl;
+        this.#serverType = 'server';
+        this.#stacks = [];
         this.$serverlessConfig = serverless;
     }
 
@@ -104,7 +99,7 @@ class Server extends ServerContract {
         path = ('/' + path).replace(/\/\//g, "/").replace(/\/$/, "");
         if (Array.isArray(handle)) {
             for (let cb of handle) {
-                this[kStacks].push({
+                this.#stacks.push({
                     route: path,
                     handle: cb
                 });
@@ -119,7 +114,7 @@ class Server extends ServerContract {
             };
         }
 
-        this[kStacks].push({
+        this.#stacks.push({
             route: path,
             handle: handle
         });
@@ -133,7 +128,7 @@ class Server extends ServerContract {
      * @returns Server SSL/TLS configuration object
      */
     public createServerConfig(): Record<string, any> {
-        return Object.assign(creatSslConfig(this[kSsl], this[kHttpVersion]));
+        return Object.assign(creatSslConfig(this.#ssl, this.#httpVersion));
     }
 
     /**
@@ -189,10 +184,10 @@ class Server extends ServerContract {
      * @returns Request dispatcher function
      */
     public handle(): (...args: any[]) => any {
-        if (this[kServerType] == 'serverless') {
+        if (this.#serverType == 'serverless') {
             return (new Serverless(this.$serverlessConfig)).handle(this.$request, this.$response);
-        } else if (this[kServerType] == 'server') {
-            return (new HttpServer(this[kStacks])).handle(this.$request, this.$response);
+        } else if (this.#serverType == 'server') {
+            return (new HttpServer(this.#stacks)).handle(this.$request, this.$response);
         }
         throw new Error('Server type not supported');
     }
@@ -204,7 +199,7 @@ class Server extends ServerContract {
      * @returns Server instance
      */
     public type(type: string): this {
-        this[kServerType] = type;
+        this.#serverType = type;
         return this;
     }
 
@@ -221,7 +216,7 @@ class Server extends ServerContract {
         cb = args.find((arg: any) => typeof arg == 'function');
         rawOptions = typeof rawOptions === 'string' ? { port: rawOptions } : rawOptions;
         const resolvedAddress: any = this.address(rawOptions);
-        const httpConfig: HttpStarterConfig = httpTypes[this[kHttpVersion]];
+        const httpConfig: HttpStarterConfig = httpTypes[this.#httpVersion];
         const httpModule: any = httpConfig.module;
 
         if (typeof resolvedAddress === 'string') {

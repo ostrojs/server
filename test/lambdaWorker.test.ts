@@ -1,3 +1,4 @@
+import { describe, test, expect, jest } from "@jest/globals";
 const _LambdaWorker = require("../src/serverless/lambdaWorker");
 const LambdaWorker = _LambdaWorker.default || _LambdaWorker;
 const _VmStrategy = require("../src/serverless/strategies/vmStrategy");
@@ -8,7 +9,7 @@ const _ForkStrategy = require("../src/serverless/strategies/forkStrategy");
 const ForkStrategy = _ForkStrategy.default || _ForkStrategy;
 const _ProcessStrategy = require("../src/serverless/strategies/processStrategy");
 const ProcessStrategy = _ProcessStrategy.default || _ProcessStrategy;
-const path = require("path");
+const path = require("node:path");
 
 describe("LambdaWorker (serverless/lambdaWorker.js)", () => {
     test("static create initializes with correct strategy for vm, thread, fork, process, and default", () => {

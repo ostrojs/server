@@ -1,7 +1,8 @@
+import { describe, test, expect } from "@jest/globals";
 const _VmStrategy = require("../src/serverless/strategies/vmStrategy");
 const VmStrategy = _VmStrategy.default || _VmStrategy;
-const path = require("path");
-const fs = require("fs");
+const path = require("node:path");
+const fs = require("node:fs");
 
 describe("VmStrategy (serverless/strategies/vmStrategy.js)", () => {
     const fixturePath = path.resolve(__dirname, "fixtures/dummyHandler.js");

@@ -1,7 +1,8 @@
+import { describe, test, expect, jest } from "@jest/globals";
 const _ProcessStrategy = require("../src/serverless/strategies/processStrategy");
 const ProcessStrategy = _ProcessStrategy.default || _ProcessStrategy;
-const path = require("path");
-const fs = require("fs");
+const path = require("node:path");
+const fs = require("node:fs");
 
 describe("ProcessStrategy (serverless/strategies/processStrategy.js)", () => {
     const fixturePath = path.resolve(__dirname, "fixtures/dummyHandler.js");

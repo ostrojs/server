@@ -1,5 +1,5 @@
-import { Worker } from 'worker_threads';
-import { resolve as pathResolve } from 'path';
+import { Worker } from 'node:worker_threads';
+import { resolve as pathResolve } from 'node:path';
 
 class ThreadStrategy {
     /**

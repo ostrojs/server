@@ -1,6 +1,7 @@
+import { describe, test, expect, jest } from "@jest/globals";
 const _ServerLess = require("../src/adapter/serverless");
 const ServerLess = _ServerLess.default || _ServerLess;
-const path = require("path");
+const path = require("node:path");
 
 class MockRequest {
     constructor(req) {

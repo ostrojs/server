@@ -1,7 +1,8 @@
+import { describe, test, expect } from "@jest/globals";
 const _ThreadStrategy = require("../src/serverless/strategies/threadStrategy");
 const ThreadStrategy = _ThreadStrategy.default || _ThreadStrategy;
-const path = require("path");
-const fs = require("fs");
+const path = require("node:path");
+const fs = require("node:fs");
 
 describe("ThreadStrategy (serverless/strategies/threadStrategy.js)", () => {
     const fixturePath = path.resolve(__dirname, "fixtures/dummyHandler.js");

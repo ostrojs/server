@@ -1,6 +1,7 @@
+import { describe, test, expect, jest } from "@jest/globals";
 const _EventBuilder = require("../src/serverless/eventBuilder");
 const EventBuilder = _EventBuilder.default || _EventBuilder;
-const EventEmitter = require("events");
+const EventEmitter = require("node:events");
 
 describe("EventBuilder (serverless/eventBuilder.js)", () => {
     test("builds event from http request with text body, cookies, query, params", async () => {

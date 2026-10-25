@@ -1,7 +1,7 @@
-import { resolve as pathResolve, isAbsolute as pathIsAbsolute } from 'path';
+import { resolve as pathResolve, isAbsolute as pathIsAbsolute } from 'node:path';
 import { LambdaWorker } from './lambdaWorker';
 import { EventBuilder } from './eventBuilder';
-import { ResponseSender } from './responseSender';
+import { ResponseSender, type LambdaResult } from './responseSender';
 
 interface ServerlessConfig {
     handler: string;
@@ -58,8 +58,8 @@ class LambdaSimulator {
         const event: unknown = await EventBuilder.fromHttpRequest(req);
         try {
             const worker = LambdaWorker.create(this.$serverless.strategy); // or 'vm', 'process', 'fork'
-            const result = await worker.run(this.$modulePath, this.$handlerName, event);
-            ResponseSender.sendSuccess(res, result as any);
+            const result = (await worker.run(this.$modulePath, this.$handlerName, event)) as LambdaResult;
+            ResponseSender.sendSuccess(res, result);
         } catch (err: unknown) {
             ResponseSender.sendError(res, err);
         }
